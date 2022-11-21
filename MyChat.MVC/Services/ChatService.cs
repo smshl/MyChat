@@ -10,11 +10,9 @@ namespace MyChat.MVC.Services
     public class ChatService : IChatService
     {
         private readonly ApplicationDbContext _context;
-        private readonly SignInManager<User> _signInManager;
-        public ChatService(ApplicationDbContext context, SignInManager<User> signInManager)
+        public ChatService(ApplicationDbContext context)
         {
             _context = context;
-            _signInManager = signInManager;
         }
         public DataViewModel<ChatViewModel> GetChatData(string contactId , string userId)
         {
@@ -24,8 +22,8 @@ namespace MyChat.MVC.Services
                 var messages = new ChatViewModel
                 {
                     RecieverId = userId,
-                    Messages = _context.Messages.Where(m => (m.SenderId == contactId && m.RecieverId == userId) ||
-                    (m.SenderId == userId && m.RecieverId == contactId)).OrderBy(t => t.SendDate).OrderBy(t => t.SendTime).ToList(),
+                    Messages = _context.Messages.Where(m => ((m.SenderId == contactId && m.RecieverId == userId) ||
+                    (m.SenderId == userId && m.RecieverId == contactId)) && m.Delleted == false).OrderBy(t => t.SendDateTime).ToList(),
                     ContactAvatar = contact.Avatar,
                     ContactId = contact.Id,
                     ContactName = contact.UserName
@@ -57,10 +55,9 @@ namespace MyChat.MVC.Services
                 Text = text,
                 SenderId = senderId,
                 RecieverId = recieverId,
-                SendDate = $"{DateTime.Now.Day} / {DateTime.Now.Month} / {DateTime.Now.Year}",
-                SendTime = $"{DateTime.Now.Hour} : {DateTime.Now.Minute}",
+                SendDateTime = DateTime.UtcNow,
                 Delleted = false,
-            });
+            }) ;
             var result = _context.SaveChanges();
             if (result > 0)
                 return new DataViewModel

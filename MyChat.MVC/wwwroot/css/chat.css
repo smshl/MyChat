@@ -92,7 +92,11 @@
 
 .chat .chat-history {
     padding: 20px;
-    border-bottom: 2px solid #fff
+    border-bottom: 2px solid #fff;
+    height: 400px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
     .chat .chat-history ul {

@@ -6,6 +6,7 @@ using MyChat.MVC.Models;
 using MyChat.MVC.Services;
 using MyChat.MVC.Interfaces;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace MyChat.MVC.Controllers
 {
@@ -37,11 +38,17 @@ namespace MyChat.MVC.Controllers
             {
                 return NotFound("User id not found!");
             }
+
+
             var model = _chatService.GetChatData(id, userId);
+
+            //var jsonModel = JsonSerializer.Serialize(_chatService.GetChatData(id, userId));
+
+
             return View(model);
         }
 
-
+        [HttpPost]
         public IActionResult SendMessage(string text, string contactId)
         {
             var result = _chatService.SendMessage(text, _signInManager.UserManager.GetUserId(User), contactId);
