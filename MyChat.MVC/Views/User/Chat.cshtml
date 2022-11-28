@@ -1,7 +1,4 @@
-﻿@model DataViewModel<ChatViewModel>
-@{
-}
-
+﻿
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -29,7 +26,7 @@
                                         <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
                                     </a>
                                     <div class="chat-about">
-                                        <h6 class="m-b-0">@Model.Data.ContactName</h6>
+                                        <h6 class="m-b-0">Contact Name</h6>
                                         <small>Last seen: 2 hours ago**</small>
                                     </div>
                                 </div>
@@ -44,46 +41,24 @@
 
                         <div class="chat-history">
                             <ul class="m-b-0">
-                                @foreach (var item in @Model.Data.Messages)
-                                {
-                                    @if (!item.Delleted)
-                                    {
-                                        @if (item.SenderId == Model.Data.RecieverId)
-                                        {
-                                            <li class="clearfix">
-                                                <div class="message-data text-right">
-                                                    <span class="message-data-time">@($"{item.SendDateTime:t}"), @($"{item.SendDateTime:d}")</span>
-                                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
-                                                </div>
-                                                <div class="message other-message float-right">@item.Text</div>
-                                            </li>
-                                        }
-                                        else
-                                        {
-                                            <li class="clearfix">
-                                                <div class="message-data">
-                                                    <span class="message-data-time">@($"{item.SendDateTime:t}"), @($"{item.SendDateTime:d}")</span>
-                                                </div>
-                                                <div class="message my-message">@item.Text</div>
-                                            </li>
 
-                                        }
-                                    }
-                                }
-                            </ul>
-                        </div>
-                        <div class="chat-message clearfix">
-                            <form method="post" asp-controller="User" asp-action="SendMessage">
-                                <input name="contactId" type="hidden" value="@Model.Data.ContactId" />
-                                <div class="input-group mb-0">
-                                    <div class="input-group-prepend">
-                                        <button type="submit" class="input-group-text"><i class="fa fa-send"></i></button>
-                                    </div>
-                                    <input type="text" name="text" class="form-control" placeholder="Enter text here...">
+                                <div id="tg">
                                 </div>
 
-                            </form>
+                            </ul>
                         </div>
+                        @*<div class="chat-message clearfix">
+                            <form method="post" asp-controller="User" asp-action="SendMessage">
+                            <input name="contactId" type="hidden" value="ContactId" />
+                            <div class="input-group mb-0">
+                            <div class="input-group-prepend">
+                            <button type="submit" class="input-group-text"><i class="fa fa-send"></i></button>
+                            </div>
+                            <input type="text" name="text" class="form-control" placeholder="Enter text here...">
+                            </div>
+
+                            </form>
+                            </div>*@
                     </div>
                 </div>
             </div>
@@ -92,7 +67,83 @@
 
     <script type="text/javascript">
 
-        fetch()
+                let urlHref = window.location.href;
+                let urlSplit = urlHref.split('/');
+                let url = window.location.origin + '/user/getjsondata/' + urlSplit[urlSplit.length - 1];
+
+        async function loadData(url) {
+          var response = await fetch(url);
+          var data = await response.json();
+          let messages = data.Data.Messages;
+
+          const div = document.createElement("div");
+
+          messages.forEach((message) => {
+            if (message.SenderId == data.Data.RecieverId) {
+              const li = document.createElement("li");
+              li.className = "clearfix";
+
+              div.appendChild(li);
+
+              const divDetails = document.createElement("div");
+              divDetails.className = "message-data text-right";
+
+              li.appendChild(divDetails);
+
+              const dateTimeSpan = document.createElement("span");
+              dateTimeSpan.className = "message-data-time";
+              dateTimeSpan.textContent = message.SendDateTime;
+
+              divDetails.appendChild(dateTimeSpan);
+
+              const imgAvatar = document.createElement("img");
+              imgAvatar.setAttribute(
+                "src",
+                "https://bootdey.com/img/Content/avatar/avatar7.png"
+              );
+              imgAvatar.setAttribute("alt", "avatar");
+
+              divDetails.appendChild(imgAvatar);
+
+              const divTextMessage = document.createElement("div");
+              divTextMessage.className = "message other-message float-right";
+              divTextMessage.textContent = message.Text;
+
+              li.appendChild(divTextMessage);
+
+            }
+
+            else {
+              const li = document.createElement("li");
+              li.className = "clearfix";
+
+              div.appendChild(li);
+
+              const divDetails = document.createElement("div");
+              divDetails.className = "message-data";
+
+              li.appendChild(divDetails);
+
+              const dateTimeSpan = document.createElement("span");
+              dateTimeSpan.className = "message-data-time";
+              dateTimeSpan.textContent = message.SendDateTime;
+
+              divDetails.appendChild(dateTimeSpan);
+
+              const divTextMessage = document.createElement("div");
+              divTextMessage.className = "message my-message";
+              divTextMessage.textContent = message.Text;
+
+              li.appendChild(divTextMessage);
+            }
+
+            tg.appendChild(div);
+
+          });
+        }
+
+        loadData(url);
+
     </script>
 
 </body>
