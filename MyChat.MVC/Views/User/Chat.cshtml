@@ -69,7 +69,7 @@
     </div>
 
     <script type="text/javascript">
-        
+
 
         let urlHref = window.location.href;
         let urlSplit = urlHref.split('/');
@@ -164,7 +164,9 @@
 
         const SendMessage = async () => {
             let message = document.getElementById('messageText');
-            SendData('POST' , url , message.value);
+            if(message.value !== '' && message.value.length !== 0){
+                SendData('POST' , url , message.value);
+            }
             message.value = '';
         };
 
@@ -172,7 +174,7 @@
         //await setInterval(loadData(url),4000);
         //}
         //test();
-        
+
         setInterval(loadData,1000,url);
 
     </script>
