@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace MyChat.MVC.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _usersService;
@@ -34,19 +34,18 @@ namespace MyChat.MVC.Controllers
         public IActionResult Chat([FromRoute] string id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //if (string.IsNullOrEmpty(id))
-            //{
-            //    return NotFound("User id not found!");
-            //}
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound("User id not found!");
+            }
 
 
             //var model = _chatService.GetChatData(id, userId);
+            //return View(model);
+
 
             var jsonModel = JsonSerializer.Serialize(_chatService.GetChatData(id, userId));
-
             return View("Chat" , jsonModel);
-
-            //return View(jsonModel);
         }
 
         [HttpPost]
@@ -56,7 +55,8 @@ namespace MyChat.MVC.Controllers
             return RedirectToAction(nameof(Chat) , new {id = contactId });
         }
 
-        public string GetJsonData([FromRoute] string id)
+        [HttpGet]
+        public string JsonData([FromRoute] string id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var jsonModel = JsonSerializer.Serialize(_chatService.GetChatData(id, userId));
@@ -64,6 +64,11 @@ namespace MyChat.MVC.Controllers
             return jsonModel;
         }
 
+        [HttpPost]
+        public void JsonData([FromBody] string messageText, [FromRoute] string id)
+        {
+            var result = _chatService.SendMessage(messageText, _signInManager.UserManager.GetUserId(User) , id);
+        }
 
     }
 }

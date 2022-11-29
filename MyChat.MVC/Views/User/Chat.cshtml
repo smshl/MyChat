@@ -26,7 +26,7 @@
                                         <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
                                     </a>
                                     <div class="chat-about">
-                                        <h6 class="m-b-0">Contact Name</h6>
+                                        <h6 id="contactName" class="m-b-0">Contact Name</h6>
                                         <small>Last seen: 2 hours ago**</small>
                                     </div>
                                 </div>
@@ -42,23 +42,26 @@
                         <div class="chat-history">
                             <ul class="m-b-0">
 
-                                <div id="tg">
-                                </div>
+                                <!-- Chat data with JS -->
+
+                                <div id="tg"></div>
+
+                                <!-- Chat data with JS -->
 
                             </ul>
                         </div>
-                        @*<div class="chat-message clearfix">
-                            <form method="post" asp-controller="User" asp-action="SendMessage">
+                        <div class="chat-message clearfix">
+
                             <input name="contactId" type="hidden" value="ContactId" />
                             <div class="input-group mb-0">
-                            <div class="input-group-prepend">
-                            <button type="submit" class="input-group-text"><i class="fa fa-send"></i></button>
-                            </div>
-                            <input type="text" name="text" class="form-control" placeholder="Enter text here...">
+                                <div class="input-group-prepend">
+                                    <button type="submit" onclick="SendMessage()" class="input-group-text"><i class="fa fa-send"></i></button>
+                                </div>
+                                <input id="messageText" type="text" name="messageText" class="form-control" placeholder="Enter text here...">
                             </div>
 
-                            </form>
-                            </div>*@
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,83 +69,111 @@
     </div>
 
     <script type="text/javascript">
+        
 
-                let urlHref = window.location.href;
-                let urlSplit = urlHref.split('/');
-                let url = window.location.origin + '/user/getjsondata/' + urlSplit[urlSplit.length - 1];
+        let urlHref = window.location.href;
+        let urlSplit = urlHref.split('/');
+        let url = window.location.origin + '/user/jsondata/' + urlSplit[urlSplit.length - 1];
+
 
         async function loadData(url) {
           var response = await fetch(url);
           var data = await response.json();
           let messages = data.Data.Messages;
 
+          let contact = document.getElementById('contactName');
+              contact.textContent = data.Data.ContactName;
+
           const div = document.createElement("div");
 
           messages.forEach((message) => {
-            if (message.SenderId == data.Data.RecieverId) {
-              const li = document.createElement("li");
-              li.className = "clearfix";
+            if(message.Delleted == false){
+                if (message.SenderId == data.Data.RecieverId) {
+                  const li = document.createElement("li");
+                  li.className = "clearfix";
 
-              div.appendChild(li);
+                  div.appendChild(li);
 
-              const divDetails = document.createElement("div");
-              divDetails.className = "message-data text-right";
+                  const divDetails = document.createElement("div");
+                  divDetails.className = "message-data text-right";
 
-              li.appendChild(divDetails);
+                  li.appendChild(divDetails);
 
-              const dateTimeSpan = document.createElement("span");
-              dateTimeSpan.className = "message-data-time";
-              dateTimeSpan.textContent = message.SendDateTime;
+                  const dateTimeSpan = document.createElement("span");
+                  dateTimeSpan.className = "message-data-time";
+                  dateTimeSpan.textContent = message.SendDateTime;
 
-              divDetails.appendChild(dateTimeSpan);
+                  divDetails.appendChild(dateTimeSpan);
 
-              const imgAvatar = document.createElement("img");
-              imgAvatar.setAttribute(
-                "src",
-                "https://bootdey.com/img/Content/avatar/avatar7.png"
-              );
-              imgAvatar.setAttribute("alt", "avatar");
+                  const imgAvatar = document.createElement("img");
+                  imgAvatar.setAttribute(
+                    "src",
+                    "https://bootdey.com/img/Content/avatar/avatar7.png"
+                  );
+                  imgAvatar.setAttribute("alt", "avatar");
 
-              divDetails.appendChild(imgAvatar);
+                  divDetails.appendChild(imgAvatar);
 
-              const divTextMessage = document.createElement("div");
-              divTextMessage.className = "message other-message float-right";
-              divTextMessage.textContent = message.Text;
+                  const divTextMessage = document.createElement("div");
+                  divTextMessage.className = "message other-message float-right";
+                  divTextMessage.textContent = message.Text;
 
-              li.appendChild(divTextMessage);
+                  li.appendChild(divTextMessage);
 
+                }
+
+                else {
+                  const li = document.createElement("li");
+                  li.className = "clearfix";
+
+                  div.appendChild(li);
+
+                  const divDetails = document.createElement("div");
+                  divDetails.className = "message-data";
+
+                  li.appendChild(divDetails);
+
+                  const dateTimeSpan = document.createElement("span");
+                  dateTimeSpan.className = "message-data-time";
+                  dateTimeSpan.textContent = message.SendDateTime;
+
+                  divDetails.appendChild(dateTimeSpan);
+
+                  const divTextMessage = document.createElement("div");
+                  divTextMessage.className = "message my-message";
+                  divTextMessage.textContent = message.Text;
+
+                  li.appendChild(divTextMessage);
+                }
             }
-
-            else {
-              const li = document.createElement("li");
-              li.className = "clearfix";
-
-              div.appendChild(li);
-
-              const divDetails = document.createElement("div");
-              divDetails.className = "message-data";
-
-              li.appendChild(divDetails);
-
-              const dateTimeSpan = document.createElement("span");
-              dateTimeSpan.className = "message-data-time";
-              dateTimeSpan.textContent = message.SendDateTime;
-
-              divDetails.appendChild(dateTimeSpan);
-
-              const divTextMessage = document.createElement("div");
-              divTextMessage.className = "message my-message";
-              divTextMessage.textContent = message.Text;
-
-              li.appendChild(divTextMessage);
-            }
-
-            tg.appendChild(div);
+            tg.innerHTML = div.innerHTML;
 
           });
         }
 
-        loadData(url);
+        const SendData = (method , url , data) => {
+            return fetch(url , {
+                method: method,
+                body: JSON.stringify(data),
+                headers: data ? {'Content-Type' : 'application/json'} : {}
+            }).then(res => {
+                return res.json()
+            })
+        }
+
+
+        const SendMessage = async () => {
+            let message = document.getElementById('messageText');
+            SendData('POST' , url , message.value);
+            message.value = '';
+        };
+
+        //const test = async () => {
+        //await setInterval(loadData(url),4000);
+        //}
+        //test();
+        
+        setInterval(loadData,1000,url);
 
     </script>
 
