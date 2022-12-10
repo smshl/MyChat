@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyChat.MVC.ViewModels;
-using MyChat.MVC.Models;
-using MyChat.MVC.Services;
-using MyChat.MVC.Interfaces;
+using MyChat.Domain.ViewModels;
+using MyChat.Core.Models;
+using MyChat.Domain.Services;
 using System.Security.Claims;
 using System.Text.Json;
 

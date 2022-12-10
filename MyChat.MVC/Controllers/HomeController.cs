@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyChat.MVC.Models;
+using MyChat.Core.Models;
 using System.Diagnostics;
 
 namespace MyChat.MVC.Controllers

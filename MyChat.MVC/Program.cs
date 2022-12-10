@@ -1,15 +1,17 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MyChat.MVC.Data;
-using MyChat.MVC.Interfaces;
-using MyChat.MVC.Models;
-using MyChat.MVC.Services;
+using MyChat.Infrastructure.Contexts;
+using MyChat.Core.Models;
+using MyChat.Domain.Services;
+using MyChat.Domain.Services.Implementations;
+using MyChat.Core.Db;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IDbContext>(x => x.GetService<ApplicationDbContext>()!);
 builder.Services.AddScoped<IUserService , UserService>();
 builder.Services.AddScoped<IChatService, ChatService>();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
