@@ -13,9 +13,9 @@ namespace MyChat.MVC.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _usersService;
-        private readonly IChatService _chatService;
+        private readonly IMessageService _chatService;
         private readonly SignInManager<User> _signInManager;
-        public UserController(IUserService usersService , IChatService chatService , SignInManager<User> signInManager)
+        public UserController(IUserService usersService , IMessageService chatService , SignInManager<User> signInManager)
         {
             _usersService = usersService;
             _chatService = chatService;

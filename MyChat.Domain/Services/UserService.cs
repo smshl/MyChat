@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MyChat.Core.Db;
 using MyChat.Core.Models;
+using MyChat.Core.Repository;
 using MyChat.Domain.ViewModels;
 
-namespace MyChat.Domain.Services.Implementations
+namespace MyChat.Domain.Services
 {
     public class UserService : IUserService
     {
-        private readonly IDbContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly UserManager<User> _userManager;
-        public UserService(IDbContext context, UserManager<User> userManager)
+        public UserService(IUserRepository userRepository, UserManager<User> userManager)
         {
-            _context = context;
+            _userRepository = userRepository;
             _userManager = userManager;
         }
 
         public DataViewModel<List<User>> GetUsersList(string userId)
         {
-            List<User> usersList = _context.Users.Where(u=>u.Id != userId).ToList();
+            List<User> usersList = _userRepository.GetAllList();
             if (usersList == null || usersList.Count == 0)
                 return new DataViewModel<List<User>>
                 {
@@ -37,7 +37,7 @@ namespace MyChat.Domain.Services.Implementations
 
         public DataViewModel<User> GetUser(string id)
         {
-            var user = _context.Users.SingleOrDefault(u => u.Id == id);
+            var user = _userRepository.GetById(id);
 
             if (user == null)
                 return new DataViewModel<User>

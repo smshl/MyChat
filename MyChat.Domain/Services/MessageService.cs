@@ -1,26 +1,28 @@
-﻿using MyChat.Core.Db;
-using MyChat.Core.Models;
+﻿using MyChat.Core.Models;
+using MyChat.Core.Repository;
 using MyChat.Domain.ViewModels;
 
-namespace MyChat.Domain.Services.Implementations
+namespace MyChat.Domain.Services
 {
-    public class ChatService : IChatService
+    public class MessageService : IMessageService
     {
-        private readonly IDbContext _context;
-        public ChatService(IDbContext context)
+        private readonly IMessageRepository _messageRepository;
+        private readonly IUserRepository _userRepository;
+        public MessageService(IMessageRepository messageRepository, IUserRepository userRepository)
         {
-            _context = context;
+            _messageRepository = messageRepository;
+            _userRepository = userRepository;
         }
-        public DataViewModel<ChatViewModel> GetChatData(string contactId , string userId)
+        public DataViewModel<ChatViewModel> GetChatData(string contactId, string userId)
         {
-            var contact = _context.Users.FirstOrDefault(u => u.Id == contactId);
+
+            var contact = _userRepository.GetById(contactId);
             if (contact != null)
             {
                 var messages = new ChatViewModel
                 {
                     RecieverId = userId,
-                    Messages = _context.Messages.Where(m => ((m.SenderId == contactId && m.RecieverId == userId) ||
-                    (m.SenderId == userId && m.RecieverId == contactId)) && m.Delleted == false).OrderBy(t => t.SendDateTime).ToList(),
+                    Messages = _messageRepository.GetLatestMessages(userId, contactId),
                     ContactAvatar = contact.Avatar,
                     ContactId = contact.Id,
                     ContactName = contact.UserName
@@ -47,22 +49,21 @@ namespace MyChat.Domain.Services.Implementations
 
         public DataViewModel SendMessage(string text, string senderId, string recieverId)
         {
-            _context.Messages.Add(new Message
+            var result = _messageRepository.AddMessage(new Message
             {
                 Text = text,
                 SenderId = senderId,
                 RecieverId = recieverId,
                 SendDateTime = DateTime.UtcNow,
                 Delleted = false,
-            }) ;
-            var result = _context.SaveChanges();
-            if (result > 0)
+            });
+            if (result)
                 return new DataViewModel
                 {
                     Succeded = true,
                     Message = "Ok"
                 };
-            
+
             else
                 return new DataViewModel
                 {

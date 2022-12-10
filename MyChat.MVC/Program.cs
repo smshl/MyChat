@@ -2,15 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using MyChat.Infrastructure.Contexts;
 using MyChat.Core.Models;
 using MyChat.Domain.Services;
-using MyChat.Domain.Services.Implementations;
-using MyChat.Core.Db;
+using MyChat.Core.Repository;
+using MyChat.Infrastructure.Repository;
+using MyChat.Core.Repository.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IDbContext>(x => x.GetService<ApplicationDbContext>()!);
 builder.Services.AddScoped<IUserService , UserService>();
-builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
