@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using MyChat.Core.Models;
-using MyChat.Core.RepositoryInterfaces;
+using MyChat.Domain.Repositories;
+using MyChat.Models;
 
 namespace MyChat.Infrastructure.Contexts
 {

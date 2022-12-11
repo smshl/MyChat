@@ -1,4 +1,4 @@
-namespace MyChat.Core.Models
+namespace MyChat.Models
 {
     public class ErrorViewModel
     {

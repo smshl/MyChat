@@ -1,4 +1,4 @@
-﻿using MyChat.Core.Models;
+﻿using MyChat.Models;
 
 namespace MyChat.Domain.ViewModels
 {

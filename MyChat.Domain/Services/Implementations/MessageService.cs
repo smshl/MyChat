@@ -1,8 +1,8 @@
-﻿using MyChat.Core.Models;
-using MyChat.Core.RepositoryInterfaces;
+﻿using MyChat.Models;
+using MyChat.Domain.Repositories;
 using MyChat.Domain.ViewModels;
 
-namespace MyChat.Domain.Services
+namespace MyChat.Domain.Services.Implementations
 {
     public class MessageService : IMessageService
     {

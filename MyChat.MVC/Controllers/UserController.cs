@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyChat.Domain.ViewModels;
-using MyChat.Core.Models;
 using MyChat.Domain.Services;
 using System.Security.Claims;
 using System.Text.Json;
+using MyChat.Models;
 
 namespace MyChat.MVC.Controllers
 {

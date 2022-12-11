@@ -4,15 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyChat.Core.RepositoryInterfaces
+namespace MyChat.Domain.Repositories
 {
     public interface IRepository<TEntity>
     {
         IQueryable<TEntity> GetAll();
         List<TEntity> GetAllList();
-        TEntity Get(TEntity entity);
         TEntity GetById(string id);
-
-
     }
 }

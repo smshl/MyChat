@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "MyChat.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "MyChat.Domain\Domain.csproj", "{156D3093-AF23-40E5-B143-3D535D572114}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{A5AEA520-FA57-4620-B2EA-C4BEE0D53E74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Core\Models.csproj", "{A5AEA520-FA57-4620-B2EA-C4BEE0D53E74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

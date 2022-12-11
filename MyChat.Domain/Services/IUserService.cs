@@ -1,5 +1,5 @@
-﻿using MyChat.Core.Models;
-using MyChat.Domain.ViewModels;
+﻿using MyChat.Domain.ViewModels;
+using MyChat.Models;
 
 namespace MyChat.Domain.Services
 {

@@ -1,23 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyChat.Core.Models;
-using MyChat.Core.RepositoryInterfaces;
+using MyChat.Domain.Repositories;
 using MyChat.Infrastructure.Contexts;
+using MyChat.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyChat.Infrastructure.Repository
+namespace MyChat.Infrastructure.Repositories
 {
-    public class MessageRepository : IRepository<Message>, IMessageRepository
+    public class MessageRepository : Repository<Message> , IMessageRepository
     {
         private readonly ApplicationDbContext _context;
-        public MessageRepository(ApplicationDbContext context)
+        public MessageRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
-        public DbSet<Message> Messages { get; set; }
 
         public bool AddMessage(Message message)
         {
@@ -31,26 +30,8 @@ namespace MyChat.Infrastructure.Repository
             return true;
         }
 
-        public Message Get(Message entity)
-        {
-            var message = _context.Messages.SingleOrDefault(m => m == entity);
-            if (entity == null || message == null)
-                return null;
-            return message;
-        }
 
-        public IQueryable<Message> GetAll()
-        {
-            return _context.Messages.AsQueryable();
-        }
-
-        public List<Message> GetAllList()
-        {
-            return _context.Messages.ToList();
-        }
-
-
-        public Message GetById(string id)
+        public override Message GetById(string id)
         {
             var message = _context.Messages.FirstOrDefault(m => m.Id == int.Parse(id));
             if (message == null)

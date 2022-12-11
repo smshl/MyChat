@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyChat.Core.Models
+namespace MyChat.Models
 {
     public class Message
     {

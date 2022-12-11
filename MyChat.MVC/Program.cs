@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using MyChat.Infrastructure.Contexts;
-using MyChat.Core.Models;
 using MyChat.Domain.Services;
-using MyChat.Core.Repository;
-using MyChat.Infrastructure.Repository;
-using MyChat.Core.Repository.Implementations;
+using MyChat.Infrastructure.Repositories;
+using MyChat.Models;
+using MyChat.Domain.Services.Implementations;
+using MyChat.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
