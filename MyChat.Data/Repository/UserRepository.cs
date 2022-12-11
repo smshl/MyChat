@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyChat.Core.Repository.Implementations
+namespace MyChat.Infrastructure.Repository
 {
     public class UserRepository : IRepository<User> , IUserRepository
     {

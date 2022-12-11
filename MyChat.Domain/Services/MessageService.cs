@@ -1,5 +1,5 @@
 ﻿using MyChat.Core.Models;
-using MyChat.Core.Repository;
+using MyChat.Core.RepositoryInterfaces;
 using MyChat.Domain.ViewModels;
 
 namespace MyChat.Domain.Services

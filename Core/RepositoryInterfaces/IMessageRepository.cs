@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyChat.Core.Repository
+namespace MyChat.Core.RepositoryInterfaces
 {
     public interface IMessageRepository : IRepository<Message>
     {
